@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Rúbrica Interactiva ISBO - Eros Sosa</title>
+  <script src="chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f0f2f5;
+      color: #212529;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h2, header h3, header h4 {
+      margin: 5px 0;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form input, .form select {
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    .form label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #198754;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #146c43;
+    }
+
+    .rubrica-tabla {
+      width: 100%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .rubrica-tabla th, .rubrica-tabla td {
+      padding: 15px;
+      border: 1px solid #dee2e6;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .rubrica-tabla th {
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .rubrica-tabla td {
+      font-size: 0.95rem;
+    }
+
+    #chartContainer {
+      margin-top: 40px;
+    }
+
+    canvas {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    #estadisticas {
+      background: #fff;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>Administración Nacional de Educación Pública – ANEP</h2>
+  <h3>Dirección General de Educación Técnico Tecnológica – DGETP - UTU</h3>
+  <h3>Instituto Superior Brazo Oriental (ISBO)</h3>
+  <h4>Asignatura: Sistemas Operativos | Docente: Eros Sosa</h4>
+  <hr>
+  <h1>Rúbrica Interactiva de Evaluación</h1>
+</header>
+
+<section class="rubrica-visual">
+  <h2 style="text-align:center; margin-top: 30px;">Criterios de Evaluación</h2>
+  <table class="rubrica-tabla">
+    <thead>
+      <tr>
+        <th>Criterio</th>
+        <th style="background:#198754; color:#fff;">🟢 Excelente (3)</th>
+        <th style="background:#ffc107;">🟡 Satisfactorio (2)</th>
+        <th style="background:#dc3545; color:#fff;">🔴 En proceso (1)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Participación activa</td>
+        <td>Participa constantemente, propone ideas, colabora espontáneamente.</td>
+        <td>Participa cuando se le solicita, cumple con lo asignado.</td>
+        <td>Requiere apoyo constante para integrarse al trabajo.</td>
+      </tr>
+      <tr>
+        <td>Ejecución de comandos</td>
+        <td>Ejecuta correctamente todos los comandos sin ayuda.</td>
+        <td>Ejecuta la mayoría con mínimas correcciones.</td>
+        <td>Necesita apoyo frecuente para completar las tareas.</td>
+      </tr>
+      <tr>
+        <td>Capacidad de análisis</td>
+        <td>Interpreta los resultados y plantea mejoras o soluciones.</td>
+        <td>Interpreta los resultados básicos.</td>
+        <td>Tiene dificultades para interpretar los resultados.</td>
+      </tr>
+      <tr>
+        <td>Colaboración efectiva</td>
+        <td>Se comunica, escucha y coopera fluidamente con su equipo.</td>
+        <td>Coopera cuando se le solicita, mantiene una comunicación básica.</td>
+        <td>Tiene dificultades para cooperar o trabajar en equipo.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="form">
+  <input type="text" id="nombre" placeholder="Nombre del estudiante">
+  <input type="text" id="apellido" placeholder="Apellido del estudiante">
+
+  <label for="participacion">Participación activa</label>
+  <select id="participacion">
+    <option value="">Seleccione...</option>
+    <option value="3">3</option>
+    <option value="2">2</option>
+    <option value="1">1</option>
+  </select>
+
+  <label for="comandos">Ejecución de comandos</label>
+  <select id="comandos">
+    <option value="">Seleccione...</option>
+    <option value="3">3</option>
+    <option value="2">2</option>
+    <option value="1">1</option>
+  </select>
+
+  <label for="analisis">Capacidad de análisis</label>
+  <select id="analisis">
+    <option value="">Seleccione...</option>
+    <option value="3">3</option>
+    <option value="2">2</option>
+    <option value="1">1</option>
+  </select>
+
+  <label for="colaboracion">Colaboración efectiva</label>
+  <select id="colaboracion">
+    <option value="">Seleccione...</option>
+    <option value="3">3</option>
+    <option value="2">2</option>
+    <option value="1">1</option>
+  </select>
+
+  <button onclick="agregarEstudiante()">Agregar Calificación</button>
+  <button onclick="borrarDatos()" style="background-color:#dc3545;">🗑️ Borrar todos los datos</button>
+</div>
+
+<div id="chartContainer">
+  <canvas id="resultChart"></canvas>
+</div>
+
+<div id="estadisticas"></div>
+
+<script>
+  const criterios = ['Participación activa', 'Ejecución de comandos', 'Capacidad de análisis', 'Colaboración efectiva'];
+  let estudiantes = JSON.parse(localStorage.getItem('rubricaDatos')) || [];
+
+  function agregarEstudiante() {
+    const nombre = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
+    const participacion = parseInt(document.getElementById('participacion').value);
+    const comandos = parseInt(document.getElementById('comandos').value);
+    const analisis = parseInt(document.getElementById('analisis').value);
+    const colaboracion = parseInt(document.getElementById('colaboracion').value);
+
+    if (!nombre || !apellido || isNaN(participacion) || isNaN(comandos) || isNaN(analisis) || isNaN(colaboracion)) {
+      alert('Por favor, completá todos los campos.');
+      return;
+    }
+
+    const nuevo = {
+      nombre,
+      apellido,
+      calificaciones: [participacion, comandos, analisis, colaboracion]
+    };
+
+    estudiantes.push(nuevo);
+    localStorage.setItem('rubricaDatos', JSON.stringify(estudiantes));
+
+    document.getElementById('nombre').value = '';
+    document.getElementById('apellido').value = '';
+    document.getElementById('participacion').value = '';
+    document.getElementById('comandos').value = '';
+    document.getElementById('analisis').value = '';
+    document.getElementById('colaboracion').value = '';
+
+    renderChart();
+    mostrarEstadisticas();
+  }
+
+  function renderChart() {
+    const ctx = document.getElementById('resultChart').getContext('2d');
+    const labels = estudiantes.map(e => `${e.apellido}, ${e.nombre}`);
+    const datasets = criterios.map((criterio, i) => ({
+      label: criterio,
+      data: estudiantes.map(e => e.calificaciones[i]),
+      backgroundColor: `hsl(${i * 90}, 70%, 60%)`
+    }));
+
+    if (window.myChart) window.myChart.destroy();
+    window.myChart = new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 3,
+            ticks: { stepSize: 1 }
+          }
+        }
+      }
+    });
+  }
+
+  function mostrarEstadisticas() {
+    const div = document.getElementById('estadisticas');
+    if (estudiantes.length === 0) return div.innerHTML = '';
+
+    let promedioGeneral = estudiantes.map(e => e.calificaciones.reduce((a,b)=>a+b)).reduce((a,b)=>a+b) / (estudiantes.length * 4);
+    let notaFinal10 = (promedioGeneral / 3) * 10;
+
+    div.innerHTML = `<h3>Estadísticas</h3>
+      <p><strong>Total de estudiantes evaluados:</strong> ${estudiantes.length}</p>
+      <p><strong>Promedio general (escala 1-3):</strong> ${promedioGeneral.toFixed(2)}</p>
+      <p><strong>Nota promedio final (escala 1-10):</strong> ${notaFinal10.toFixed(1)}</p>`;
+  }
+
+  function borrarDatos() {
+    if (confirm('¿Estás seguro que querés borrar todos los datos de la rúbrica?')) {
+      localStorage.removeItem('rubricaDatos');
+      estudiantes = [];
+      renderChart();
+      mostrarEstadisticas();
+    }
+  }
+
+  window.onload = function() {
+    renderChart();
+    mostrarEstadisticas();
+  };
+</script>
+
+</body>
+</html>
